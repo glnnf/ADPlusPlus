@@ -1,0 +1,35 @@
+Only the the accounts that have been auth'd are able to interface with the app. AKA only ours
+
+need to run a check_or_create_cal(calender_name) call first to initialize the google calendar
+
+once that has been done you can call any of the functions
+
+create_ygbfkm()
+create_mid()
+create_meh()
+
+all use the following inputs
+
+name: String
+title of the event
+
+about: String
+description of the event
+
+begin: String
+start time of the event
+uses the format 'YYYY-MM-DDTHH-mm-SS+/-HH:MM'
+or year month day T hour minute second + or - timezone offset
+"2026-03-29T03:00:00-06:00"
+
+end: String
+end of event
+uses the format 'YYYY-MM-DDTHH-mm-SS+/-HH:MM'
+or year month day T hour minute second + or - timezone offset
+"2026-03-29T03:00:00-06:00"
+
+popup: integer
+how far out to set mobile reminder in number of minute
+
+email: integer
+how far to set email reminder in minutes
