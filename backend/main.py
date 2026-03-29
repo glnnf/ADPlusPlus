@@ -15,6 +15,8 @@ powershell:
 
 pip install "fastapi[standard]"
 
+fastapi dev main.py
+
 5. Deactivate when done working
 
 deactivate
@@ -28,7 +30,7 @@ from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 
 origins = [
-    "http://localhost:5173",  # Default Vite port
+    "http://localhost:3000",  # Default Vite port
     "http://127.0.0.1:5173",
 ]
 
@@ -43,4 +45,3 @@ app.add_middleware(
 @app.get("/")
 async def root():
     return {"message": "hello world"}
-
