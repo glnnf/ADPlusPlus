@@ -1,7 +1,7 @@
 #fastAPI
-
-backend/.venv/
-backend/.env
+venv/
+.venv/
+env/
 backend/__pycache__/
 backend/*.py[cod]
 backend/*$py.class
