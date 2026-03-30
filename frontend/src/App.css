@@ -1,184 +1,281 @@
-.counter {
-  font-size: 16px;
-  padding: 5px 10px;
-  border-radius: 5px;
-  color: var(--accent);
-  background: var(--accent-bg);
-  border: 2px solid transparent;
-  transition: border-color 0.3s;
-  margin-bottom: 24px;
+/* ── Layout ─────────────────────────────────────────── */
 
-  &:hover {
-    border-color: var(--accent-border);
-  }
-  &:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-  }
-}
-
-.hero {
-  position: relative;
-
-  .base,
-  .framework,
-  .vite {
-    inset-inline: 0;
-    margin: 0 auto;
-  }
-
-  .base {
-    width: 170px;
-    position: relative;
-    z-index: 0;
-  }
-
-  .framework,
-  .vite {
-    position: absolute;
-  }
-
-  .framework {
-    z-index: 1;
-    top: 34px;
-    height: 28px;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(44deg) rotateY(39deg)
-      scale(1.4);
-  }
-
-  .vite {
-    z-index: 0;
-    top: 107px;
-    height: 26px;
-    width: auto;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(40deg) rotateY(39deg)
-      scale(0.8);
-  }
-}
-
-#center {
+#main {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 25px;
-  place-content: center;
-  place-items: center;
-  flex-grow: 1;
+  padding: 48px 40px 32px;
+  max-width: 640px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+  position: relative;
 
-  @media (max-width: 1024px) {
+  @media (max-width: 768px) {
     padding: 32px 20px 24px;
-    gap: 18px;
   }
 }
 
-#next-steps {
+/* ── Header ─────────────────────────────────────────── */
+
+#top-bar {
   display: flex;
-  border-top: 1px solid var(--border);
-  text-align: left;
-
-  & > div {
-    flex: 1 1 0;
-    padding: 32px;
-    @media (max-width: 1024px) {
-      padding: 24px 20px;
-    }
-  }
-
-  .icon {
-    margin-bottom: 16px;
-    width: 22px;
-    height: 22px;
-  }
-
-  @media (max-width: 1024px) {
-    flex-direction: column;
-    text-align: center;
-  }
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 32px;
 }
 
-#docs {
-  border-right: 1px solid var(--border);
-
-  @media (max-width: 1024px) {
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-  }
+#top-bar h1 {
+  margin: 0;
+  font-size: 36px;
+  font-weight: 600;
+  letter-spacing: -1px;
+  color: var(--text-h);
 }
 
-#next-steps ul {
+.task-count {
+  font-size: 13px;
+  color: var(--text);
+  opacity: 0.5;
+  font-family: var(--mono);
+}
+
+/* ── Task list ──────────────────────────────────────── */
+
+#task-list {
   list-style: none;
+  margin: 0;
   padding: 0;
   display: flex;
-  gap: 8px;
-  margin: 32px 0 0;
+  flex-direction: column;
+  gap: 2px;
+}
 
-  .logo {
-    height: 18px;
-  }
+.empty-state {
+  font-size: 14px;
+  color: var(--text);
+  opacity: 0.4;
+  padding: 40px 0;
+  text-align: center;
+}
 
-  a {
-    color: var(--text-h);
-    font-size: 16px;
-    border-radius: 6px;
-    background: var(--social-bg);
-    display: flex;
-    padding: 6px 12px;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-    transition: box-shadow 0.3s;
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: transparent;
+  transition: background 0.15s;
 
-    &:hover {
-      box-shadow: var(--shadow);
-    }
-    .button-icon {
-      height: 18px;
-      width: 18px;
-    }
-  }
+  &:hover {
+    background: var(--accent-bg);
 
-  @media (max-width: 1024px) {
-    margin-top: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
-
-    li {
-      flex: 1 1 calc(50% - 8px);
-    }
-
-    a {
-      width: 100%;
-      justify-content: center;
-      box-sizing: border-box;
+    .task-delete {
+      opacity: 1;
     }
   }
 }
 
-#spacer {
-  height: 88px;
-  border-top: 1px solid var(--border);
-  @media (max-width: 1024px) {
-    height: 48px;
+.task-check {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  border: 1.5px solid var(--border);
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s, background 0.2s;
+  color: #fff;
+  padding: 0;
+
+  &:hover {
+    border-color: var(--accent);
   }
 }
 
-.ticks {
-  position: relative;
+.task-item.done .task-check {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.task-text {
+  flex: 1;
+  font-size: 15px;
+  color: var(--text-h);
+  transition: opacity 0.2s;
+}
+
+.task-item.done .task-text {
+  opacity: 0.35;
+  text-decoration: line-through;
+}
+
+.task-delete {
+  flex-shrink: 0;
+  opacity: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text);
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.15s, color 0.15s;
+
+  &:hover {
+    color: #ef4444;
+  }
+}
+
+/* ── Add button ─────────────────────────────────────── */
+
+#add-btn {
+  position: fixed;
+  bottom: 60px;
+  right: calc(50% - 560px);
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background: var(--accent);
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 24px rgba(170, 59, 255, 0.4);
+  transition: transform 0.15s, box-shadow 0.15s;
+
+  &:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 28px rgba(170, 59, 255, 0.55);
+  }
+  &:active {
+    transform: scale(0.96);
+  }
+
+  @media (max-width: 1200px) {
+    right: 24px;
+  }
+}
+
+/* ── Modal ──────────────────────────────────────────── */
+
+#modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  animation: fade-in 0.15s ease;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+#modal {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px;
   width: 100%;
+  max-width: 400px;
+  margin: 0 20px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+  animation: slide-up 0.18s ease;
+}
 
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    top: -4.5px;
-    border: 5px solid transparent;
+@keyframes slide-up {
+  from { transform: translateY(12px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+#modal h2 {
+  margin: 0 0 20px;
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--text-h);
+}
+
+#task-input {
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--code-bg);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 15px;
+  font-family: var(--sans);
+  color: var(--text-h);
+  outline: none;
+  transition: border-color 0.2s;
+
+  &::placeholder { color: var(--text); opacity: 0.4; }
+  &:focus { border-color: var(--accent); }
+}
+
+#modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.btn-cancel {
+  padding: 9px 18px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &:hover { background: var(--accent-bg); }
+}
+
+.btn-confirm {
+  padding: 9px 18px;
+  border-radius: 8px;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.15s;
+
+  &:disabled { opacity: 0.35; cursor: not-allowed; }
+  &:not(:disabled):hover { opacity: 0.88; }
+}
+
+/* ── Footer ─────────────────────────────────────────── */
+
+#footer {
+  padding: 18px 40px;
+  background: #0d0d0d;
+  border-top: 1px solid #1f1f1f;
+  text-align: center;
+
+  span {
+    font-size: 13px;
+    color: #4a4a4a;
+    letter-spacing: 0.3px;
+    font-family: var(--mono);
   }
 
-  &::before {
-    left: 0;
-    border-left-color: var(--border);
-  }
-  &::after {
-    right: 0;
-    border-right-color: var(--border);
+  @media (max-width: 768px) {
+    padding: 16px 20px;
   }
 }

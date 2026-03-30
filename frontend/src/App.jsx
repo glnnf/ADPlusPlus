@@ -1,119 +1,102 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [tasks, setTasks] = useState([])
+  const [modalOpen, setModalOpen] = useState(false)
+  const [input, setInput] = useState('')
+
+  const handleAdd = () => {
+    const trimmed = input.trim()
+    if (!trimmed) return
+    setTasks(prev => [...prev, { id: Date.now(), text: trimmed, done: false }])
+    setInput('')
+    setModalOpen(false)
+  }
+
+  const handleToggle = (id) => {
+    setTasks(prev => prev.map(t => t.id === id ? { ...t, done: !t.done } : t))
+  }
+
+  const handleDelete = (id) => {
+    setTasks(prev => prev.filter(t => t.id !== id))
+  }
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') handleAdd()
+    if (e.key === 'Escape') setModalOpen(false)
+  }
 
   return (
     <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
+      <main id="main">
+        <header id="top-bar">
+          <h1>Reminders</h1>
+          <span className="task-count">{tasks.filter(t => !t.done).length} remaining</span>
+        </header>
+
+        <ul id="task-list">
+          {tasks.length === 0 && (
+            <li className="empty-state">No tasks yet. Hit <strong>+</strong> to add one.</li>
+          )}
+          {tasks.map(task => (
+            <li key={task.id} className={`task-item${task.done ? ' done' : ''}`}>
+              <button
+                className="task-check"
+                onClick={() => handleToggle(task.id)}
+                aria-label={task.done ? 'Mark incomplete' : 'Mark complete'}
+              >
+                {task.done && (
+                  <svg viewBox="0 0 12 12" fill="none" width="12" height="12">
+                    <path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                )}
+              </button>
+              <span className="task-text">{task.text}</span>
+              <button
+                className="task-delete"
+                onClick={() => handleDelete(task.id)}
+                aria-label="Delete task"
+              >
+                <svg viewBox="0 0 12 12" fill="none" width="12" height="12">
+                  <path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
+                </svg>
+              </button>
+            </li>
+          ))}
+        </ul>
+
+        <button id="add-btn" onClick={() => setModalOpen(true)} aria-label="Add task">
+          <svg viewBox="0 0 24 24" fill="none" width="24" height="24">
+            <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"/>
+          </svg>
         </button>
-      </section>
+      </main>
 
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+      {modalOpen && (
+        <div id="modal-overlay" onClick={() => setModalOpen(false)}>
+          <div id="modal" onClick={e => e.stopPropagation()}>
+            <h2>New Task</h2>
+            <input
+              id="task-input"
+              type="text"
+              placeholder="What do you need to do?"
+              value={input}
+              onChange={e => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              autoFocus
+            />
+            <div id="modal-actions">
+              <button className="btn-cancel" onClick={() => setModalOpen(false)}>Cancel</button>
+              <button className="btn-confirm" onClick={handleAdd} disabled={!input.trim()}>Add Task</button>
+            </div>
+          </div>
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+      )}
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
+      <footer id="footer">
+        <span>© {new Date().getFullYear()} Reminders. All rights reserved.</span>
+      </footer>
     </>
   )
 }
