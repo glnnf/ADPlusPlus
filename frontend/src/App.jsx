@@ -23,7 +23,7 @@ function App() {
 
   return (
     <div style={{ textAlign: 'center', marginTop: '50px' }}>
-      <h1>Google Calendar Integration</h1>
+      <h1>AD++</h1>
       <button 
         onClick={triggerCalendarEvent} 
         disabled={loading}
